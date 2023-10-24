@@ -1,34 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Food : MonoBehaviour
 {
-    public BoxCollider2D Area;
+	[SerializeField]
+	private	BoxCollider2D	mapCollider2D;
 
-    private void Start()
-    {
-        RandomizePosition();
-    }
+	private void Awake()
+	{
+		SetupRandomPosition();
+	}
 
-    private void RandomizePosition()
-    {
-        Bounds bounds = this.Area.bounds;
+	private void SetupRandomPosition()
+	{
+		Bounds bounds = mapCollider2D.bounds;
 
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
+		int x = Random.Range((int)bounds.min.x, (int)bounds.max.x+1);
+		int y = Random.Range((int)bounds.min.y, (int)bounds.max.y+1);
 
-        this.transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y),0.0f);
+		transform.position = new Vector2(x, y);
+	}
 
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Player")
-        {
-            RandomizePosition();
-        }
-    }
-
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		SetupRandomPosition();
+	}
 }
+
