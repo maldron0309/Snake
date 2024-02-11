@@ -32,6 +32,11 @@ public class SnakeMovement : MonoBehaviour
         SnakeMove();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Item")) AddSegment();
+    }
+
     private void SnakeMove()
     {
         // 현재 x축으로 이동중이면 y축 방향으로만 방향 전환 가능
@@ -87,12 +92,17 @@ public class SnakeMovement : MonoBehaviour
     {
         // 실제 이동할 때 마지막 입력 방향으로 이동하도록 설정
         moveDir = lastInputDir;
-        
+
         for (int i = segments.Count - 1; i > 0; -- i)
         {
             segments[i].position = segments[i - 1].position;
         }
 
         transform.position = (Vector2)transform.position + moveDir;
+    }
+    
+    private void OnCollisionEnter2D(Collision2D other) 
+    {
+        if (other.gameObject.tag == "Wall") GameManager.instance.GameOver();
     }
 }
